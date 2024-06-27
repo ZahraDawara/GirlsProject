@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace rename
 {
@@ -10,7 +6,7 @@ namespace rename
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Geben Sie Bitte ");
+            Console.WriteLine("");
             Console.WriteLine("Hallo");
         }
     }
