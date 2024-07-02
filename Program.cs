@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace rename
 {
@@ -11,20 +9,24 @@ namespace rename
     {
 
         static void Main(string[] args)
-        { // Datei zugreifen
-            var folderPath = @"C:\Users\fd\Desktop\Projekt_Rename\Biler\";
-            var fileEntries = Directory.GetFiles(folderPath);
-            string[] fileNamen = new string[fileEntries.Length];
+		{
+			
+		}
 
-            foreach (var fileEntry in fileEntries)
-                {
-                    var filename = Path.GetFileName(fileEntry);
-                    Console.WriteLine(filename);
-                }
-            
-            Console.ReadKey();
-           
+		static string[] ReadFileNames()
+		{
+			string folderPath = @"C:\Users\fd\Desktop\Projekt_Rename\Biler\";
+			string[] fileEntries = Directory.GetFiles(folderPath);
+			string[] fileNamen = new string[fileEntries.Length];
 
-        }
-    }
+			foreach (string fileEntry in fileEntries)
+			{
+				string filename = Path.GetFileName(fileEntry);
+				fileNamen.Append(filename);
+			}
+
+			return fileNamen;
+
+		}
+ }
 }
