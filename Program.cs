@@ -26,5 +26,42 @@ namespace rename
 			return fileNamen;
 
 		}
+
+		static void FuehrendeNullen()
+		{
+			string[] fileNames = ReadFileNames();
+			int zahl = 0;
+			bool zahlVorne = false;
+
+			foreach(string name in fileNames)
+			{
+				string[] nameSplit = name.Split('.');
+
+				string[] firstPart = nameSplit[0].Split('-');
+
+				try
+				{
+					zahl = Int32.Parse(firstPart[0]);
+					zahlVorne = true;
+				}
+				catch(Exception e)
+				{
+					zahlVorne = false;
+				}
+
+				if(zahlVorne == true)
+				{
+					if (zahl < 10)
+					{
+						firstPart[0] = "00" + zahl;
+					}
+					else if (zahl > 10 && zahl < 100)
+					{
+						firstPart[0] = "0" + zahl;
+					}
+				}
+
+			}
+		}
     }
 }
