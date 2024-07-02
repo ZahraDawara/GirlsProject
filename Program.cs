@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -6,6 +7,7 @@ namespace rename
 {
     internal class Program
     {
+
         static void Main(string[] args)
 		{
 			
@@ -26,5 +28,5 @@ namespace rename
 			return fileNamen;
 
 		}
-    }
+ }
 }
