@@ -14,3 +14,7 @@ console:
 
 1. git checkout branchname
 2. git checkout -b Branchname : NEUER branch erstellen
+
+
+
+git merge maste
