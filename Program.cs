@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace rename
 {
@@ -10,62 +11,93 @@ namespace rename
 
         static void Main(string[] args)
 		{
-			
+			//("C:\\Users\\03717\\Pictures\\Test");
+
+			Console.ReadKey();
 		}
 
-		static string[] ReadFileNames()
+		static void AnalyseMuster(string Path, string endung, string präfix)
 		{
-			string folderPath = @"C:\Users\fd\Desktop\Projekt_Rename\Biler\";
-			string[] fileEntries = Directory.GetFiles(folderPath);
-			string[] fileNamen = new string[fileEntries.Length];
-
-			foreach (string fileEntry in fileEntries)
+			if (!Directory.Exists(Path))
 			{
-				string filename = Path.GetFileName(fileEntry);
-				fileNamen.Append(filename);
+				Console.WriteLine("Das angegebene Verzeichnis existiert nicht.");
+				return;
 			}
 
-			return fileNamen;
-
-		}
- 
-
-		static void FuehrendeNullen()
-		{
-			string[] fileNames = ReadFileNames();
-			int zahl = 0;
-			bool zahlVorne = false;
-
-			foreach(string name in fileNames)
+			if (Path.EndsWith(endung))
 			{
-				string[] nameSplit = name.Split('.');
 
-				string[] firstPart = nameSplit[0].Split('-');
+			}
+
+			if (Path.StartsWith(präfix))
+			{
+
+			}
+		}
+
+		public static List<string> GetFileNames(string directoryPath)
+		{
+			if (!Directory.Exists(directoryPath))
+			{
+				Console.WriteLine("Das angegebene Verzeichnis existiert nicht.");
+				return new List<string>();
+			}
+
+			return Directory.GetFiles(directoryPath).ToList();
+		}
+
+		public static Dictionary<string, string> AddLeadingZeros(List<string> files)
+		{
+			var fileMappings = new Dictionary<string, string>();
+			Regex regex = new Regex(@"^(\d+)");
+			int maxDigits = files
+				.Select(file => regex.Match(Path.GetFileName(file)))
+				.Where(match => match.Success)
+				.Select(match => match.Groups[1].Value.Length)
+				.DefaultIfEmpty(0)
+				.Max();
+
+			foreach (string file in files)
+			{
+				string fileName = Path.GetFileName(file);
+				Match match = regex.Match(fileName);
+				if (match.Success)
+				{
+					string numberStr = match.Groups[1].Value;
+					int number = int.Parse(numberStr);
+					string newNumberStr = number.ToString().PadLeft(maxDigits, '0');
+					string newFileName = regex.Replace(fileName, newNumberStr);
+					fileMappings[file] = Path.Combine(Path.GetDirectoryName(file), newFileName);
+				}
+			}
+
+			return fileMappings;
+		}
+
+		public static void RenameFiles(Dictionary<string, string> fileMappings)
+		{
+			foreach (var entry in fileMappings)
+			{
+				string oldFilePath = entry.Key;
+				string newFilePath = entry.Value;
 
 				try
 				{
-					zahl = Int32.Parse(firstPart[0]);
-					zahlVorne = true;
+					File.Move(oldFilePath, newFilePath);
+					Console.WriteLine($"Datei umbenannt: {Path.GetFileName(oldFilePath)} -> {Path.GetFileName(newFilePath)}");
 				}
-				catch(Exception e)
+				catch (Exception ex)
 				{
-					zahlVorne = false;
+					Console.WriteLine($"Fehler beim Umbenennen der Datei {Path.GetFileName(oldFilePath)}: {ex.Message}");
 				}
-
-				if(zahlVorne == true)
-				{
-					if (zahl < 10)
-					{
-						firstPart[0] = "00" + zahl;
-					}
-					else if (zahl > 10 && zahl < 100)
-					{
-						firstPart[0] = "0" + zahl;
-					}
-				}
-
 			}
 		}
+
+		public static void ChangeNumbers(Dictionary<string, string> fileMappings)
+		{
+
+		}
+
     }
 }
 
