@@ -29,9 +29,7 @@ namespace rename
 				string filename = Path.GetFileName(fileEntries[i]);
 				fileNamen[i] = filename;
 			}
-
 			return fileNamen;
-
 		}
 		static Dictionary<string, string> changeRaeflixName(string[] fileNamen)
 		{
@@ -82,6 +80,23 @@ namespace rename
 			return mydictionary;
 
 		}
+        static Dictionary<string, string> deleteSuffixName(string[] fileNamen, string suffix)
+        {
+            string[] deleteSuffixName = new string[fileNamen.Length];
+            Dictionary<string, string> mydictionary = new Dictionary<string, string>();
+            for (int i = 0; i < fileNamen.Length; i++)
+            {
+                if (fileNamen[i].EndsWith(suffix))
+                {
+					int suffixlen = suffix.Length;
+                    int fileNameLen = fileNamen[i].Count();
+                    deleteSuffixName[i] = fileNamen[i].Substring(0, fileNameLen - suffixlen) ;
+                    mydictionary.Add(fileNamen[i], deleteSuffixName[i]);
+                }
+            }
+            return mydictionary;
 
-	}
+        }
+
+    }
 }
