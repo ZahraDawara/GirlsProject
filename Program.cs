@@ -16,23 +16,9 @@ namespace rename
 			Console.ReadKey();
 		}
 
-		static void AnalyseMuster(string Path, string endung, string präfix)
+		static void AnalyseMuster(string endung, string präfix)
 		{
-			if (!Directory.Exists(Path))
-			{
-				Console.WriteLine("Das angegebene Verzeichnis existiert nicht.");
-				return;
-			}
-
-			if (Path.EndsWith(endung))
-			{
-
-			}
-
-			if (Path.StartsWith(präfix))
-			{
-
-			}
+			
 		}
 
 		public static List<string> GetFileNames(string directoryPath)
