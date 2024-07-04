@@ -17,4 +17,4 @@ console:
 
 
 
-git merge maste
+git merge master
