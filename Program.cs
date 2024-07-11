@@ -16,11 +16,6 @@ namespace rename
 			Console.ReadKey();
 		}
 
-		static void AnalyseMuster(string endung, string präfix)
-		{
-			
-		}
-
 		public static List<string> GetFileNames(string directoryPath)
 		{
 			if (!Directory.Exists(directoryPath))
@@ -78,12 +73,6 @@ namespace rename
 				}
 			}
 		}
-
-		public static void ChangeNumbers(Dictionary<string, string> fileMappings)
-		{
-
-		}
-
     }
 }
 
