@@ -13,7 +13,9 @@ namespace rename
 		static void Main(string[] args)
 		{
 			string[] fileNamen = ReadFileNames();
-			 changeRaeflixName(fileNamen);
+			 changeRaeflixName(fileNamen,"img","Image");
+			changeSuffixnamen(fileNamen,"npg","txt");
+			deletePraefixName(fileNamen,"img");
 			
 		}
 
@@ -31,7 +33,7 @@ namespace rename
 			}
 			return fileNamen;
 		}
-		static Dictionary<string, string> changeRaeflixName(string[] fileNamen)
+		static Dictionary<string, string> changeRaeflixName(string[] fileNamen, string praefixAlt, string praefixNeu)
 		{
 			string[] changeRaeflixName = new string[fileNamen.Length];
 
@@ -40,38 +42,38 @@ namespace rename
 
 			for (int i = 0; i < fileNamen.Length; i++)
 			{
-				if (fileNamen[i].StartsWith("img-"))
+				if (fileNamen[i].StartsWith(praefixAlt))
 				{
-
-					changeRaeflixName[i] = "Image-" + fileNamen[i].Substring(4);
+					int praefixAltLen =praefixAlt.Length;
+					changeRaeflixName[i] = praefixNeu + fileNamen[i].Substring(praefixAltLen);
 					mydictionary.Add(fileNamen[i], changeRaeflixName[i]);
 				}
 			}
 			return mydictionary;
 		}
-		static Dictionary<string,string> changeSuffixnamen(string[] fileNamen, string suffix)
+		static Dictionary<string,string> changeSuffixnamen(string[] fileNamen,string suffixAlt, string suffixNeu)
 		{
             string[] changeSuffixName = new string[fileNamen.Length];
             Dictionary<string, string> mydictionary = new Dictionary<string, string>();
 			
 			for(int i = 0;i < fileNamen.Length; i++)
 			{
-				if (fileNamen[i].EndsWith("jpg"))
-				{
+				if (fileNamen[i].EndsWith(suffixAlt))
+				{ int suffixAltLen = suffixAlt.Length;
 					int fileNameLen = fileNamen[i].Count();
-					changeSuffixName[i] = fileNamen[i].Substring(0, fileNameLen-3)+suffix;
+					changeSuffixName[i] = fileNamen[i].Substring(0, fileNameLen-suffixAltLen)+suffixNeu;
 					mydictionary.Add(fileNamen[i], changeSuffixName[i]);
 				}
 			}
             return mydictionary;
         }
-		static Dictionary<string,string> deletePraefixName(string[] fileNamen)
+		static Dictionary<string,string> deletePraefixName(string[] fileNamen, string praefix)
 		{
             string[] deletePraefixName = new string[fileNamen.Length];
             Dictionary<string, string> mydictionary = new Dictionary<string, string>();
             for (int i = 0; i < fileNamen.Length; i++)
 			{
-				if (fileNamen[i].StartsWith("img-"))
+				if (fileNamen[i].StartsWith(praefix))
 				{
 					string newFilename = fileNamen[i].Substring(4);
 					mydictionary.Add(fileNamen[i], deletePraefixName[i]);
