@@ -14,7 +14,7 @@ namespace rename
 		{
 			string[] fileNamen = ReadFileNames();
 			 changeRaeflixName(fileNamen,"img","Image");
-			changeSuffixnamen(fileNamen,"npg","txt");
+			changeSuffixnamen(fileNamen,"png","txt");
 			deletePraefixName(fileNamen,"img");
 			
 		}
