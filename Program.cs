@@ -11,9 +11,7 @@ namespace rename
 
         static void Main(string[] args)
 		{
-			//("C:\\Users\\03717\\Pictures\\Test");
-
-			Console.ReadKey();
+			
 		}
 
 		public static List<string> GetFileNames(string directoryPath)
