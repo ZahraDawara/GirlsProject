@@ -138,5 +138,43 @@ namespace rename
 
 			return myDictionary;
 		}
-	}
+
+		// Niginakhon Shukurova - Teilausdruecke umbennnen
+
+		public static void TeilausdrueckeWechsel(string directoryPath, string oldPattern, string newPattern)
+        {
+            try
+            {
+                if (Directory.Exists(directoryPath))
+                {
+                    string[] allFiles = Directory.GetFiles(directoryPath);
+
+                    foreach (string file in allFiles)
+                    {
+                        string fileName = Path.GetFileNameWithoutExtension(file);
+                        string fileExtension = Path.GetExtension(file);
+                        string newFileName = fileName;
+
+                        if (fileName.Contains(oldPattern))
+                        {
+                            newFileName = fileName.Replace(oldPattern, newPattern);
+                            string newFilePath = Path.Combine(directoryPath, newFileName + fileExtension);
+                            File.Move(file, newFilePath);
+
+                            Console.WriteLine($"Renamed: {file} -> {newFilePath}");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Directory does not exist!");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine("Error renaming files: " + ex.Message);
+            }
+        }
+    }
 }
+
