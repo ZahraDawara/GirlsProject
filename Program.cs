@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
-using System.Xml.Linq;
+using System.Text.RegularExpressions;
 
 
 namespace rename
@@ -13,13 +12,26 @@ namespace rename
 
 		static void Main(string[] args)
 		{
-			string[] fileNamen = ReadFileNames();
-			 changeRaeflixName(fileNamen,"img","Image");
-			changeSuffixnamen(fileNamen,"npg","txt");
-			deletePraefixName(fileNamen,"img");
-			
+			// Beispielverzeichnis angeben (muss angepasst werden)
+			string directoryPath = @"C:\Verzeichnis";
+
+			// Dateinamen lesen
+			List<string> fileNamen = GetFileNames(directoryPath);
+
+			// Präfix ändern
+			var changedRaeflixNames = ChangePrefixName(fileNamen, "img", "Image");
+			RenameFiles(changedRaeflixNames);
+
+			// Suffix ändern
+			var changedSuffixNames = ChangeSuffixNames(fileNamen, "jpg", "txt");
+			RenameFiles(changedSuffixNames);
+
+			// Präfix entfernen
+			var deletedPrefixNames = DeletePrefixName(fileNamen, "img");
+			RenameFiles(deletedPrefixNames);
 		}
 
+		// Methode, um alle Dateinamen aus einem Verzeichnis zu lesen
 		public static List<string> GetFileNames(string directoryPath)
 		{
 			if (!Directory.Exists(directoryPath))
@@ -31,98 +43,13 @@ namespace rename
 			return Directory.GetFiles(directoryPath).ToList();
 		}
 
-		public static Dictionary<string, string> AddLeadingZeros(List<string> files)
-		{
-			var fileMappings = new Dictionary<string, string>();
-			Regex regex = new Regex(@"^(\d+)");
-			int maxDigits = files
-				.Select(file => regex.Match(Path.GetFileName(file)))
-				.Where(match => match.Success)
-				.Select(match => match.Groups[1].Value.Length)
-				.DefaultIfEmpty(0)
-				.Max();
-
-			foreach (string file in files)
-			{
-				string fileName = Path.GetFileName(file);
-				Match match = regex.Match(fileName);
-				if (match.Success)
-				{
-					string numberStr = match.Groups[1].Value;
-					int number = int.Parse(numberStr);
-					string newNumberStr = number.ToString().PadLeft(maxDigits, '0');
-					string newFileName = regex.Replace(fileName, newNumberStr);
-					fileMappings[file] = Path.Combine(Path.GetDirectoryName(file), newFileName);
-				}
-			}
-
-			return fileMappings;
-		}
-
+		// Methode zum Umbenennen von Dateien basierend auf einer Zuordnung
 		public static void RenameFiles(Dictionary<string, string> fileMappings)
 		{
 			foreach (var entry in fileMappings)
 			{
 				string oldFilePath = entry.Key;
 				string newFilePath = entry.Value;
-
-        for (int i = 0; i < fileEntries.Length; i++)
-			{
-
-				string filename = Path.GetFileName(fileEntries[i]);
-				fileNamen[i] = filename;
-			}
-			return fileNamen;
-		}
-      
-		static Dictionary<string, string> changeRaeflixName(string[] fileNamen, string praefixAlt, string praefixNeu)
-		{
-			string[] changeRaeflixName = new string[fileNamen.Length];
-
-			//Array.Copy(fileNamen, fileNameChange, fileNamen.Length);
-			Dictionary<string, string> mydictionary = new Dictionary<string, string>();
-
-			for (int i = 0; i < fileNamen.Length; i++)
-			{
-				if (fileNamen[i].StartsWith(praefixAlt))
-				{
-					int praefixAltLen =praefixAlt.Length;
-					changeRaeflixName[i] = praefixNeu + fileNamen[i].Substring(praefixAltLen);
-					mydictionary.Add(fileNamen[i], changeRaeflixName[i]);
-				}
-			}
-			return mydictionary;
-		}
-		static Dictionary<string,string> changeSuffixnamen(string[] fileNamen,string suffixAlt, string suffixNeu)
-		{
-            string[] changeSuffixName = new string[fileNamen.Length];
-            Dictionary<string, string> mydictionary = new Dictionary<string, string>();
-			
-			for(int i = 0;i < fileNamen.Length; i++)
-			{
-				if (fileNamen[i].EndsWith(suffixAlt))
-				{ int suffixAltLen = suffixAlt.Length;
-					int fileNameLen = fileNamen[i].Count();
-					changeSuffixName[i] = fileNamen[i].Substring(0, fileNameLen-suffixAltLen)+suffixNeu;
-					mydictionary.Add(fileNamen[i], changeSuffixName[i]);
-				}
-			}
-            return mydictionary;
-        }
-		static Dictionary<string,string> deletePraefixName(string[] fileNamen, string praefix)
-		{
-            string[] deletePraefixName = new string[fileNamen.Length];
-            Dictionary<string, string> mydictionary = new Dictionary<string, string>();
-            for (int i = 0; i < fileNamen.Length; i++)
-			{
-				if (fileNamen[i].StartsWith(praefix))
-				{
-					string newFilename = fileNamen[i].Substring(4);
-					mydictionary.Add(fileNamen[i], deletePraefixName[i]);
-				}
-			}
-			return mydictionary;
-
 
 				try
 				{
@@ -135,24 +62,81 @@ namespace rename
 				}
 			}
 		}
-        static Dictionary<string, string> deleteSuffixName(string[] fileNamen, string suffix)
-        {
-            string[] deleteSuffixName = new string[fileNamen.Length];
-            Dictionary<string, string> mydictionary = new Dictionary<string, string>();
-            for (int i = 0; i < fileNamen.Length; i++)
-            {
-                if (fileNamen[i].EndsWith(suffix))
-                {
-					int suffixlen = suffix.Length;
-                    int fileNameLen = fileNamen[i].Count();
-                    deleteSuffixName[i] = fileNamen[i].Substring(0, fileNameLen - suffixlen) ;
-                    mydictionary.Add(fileNamen[i], deleteSuffixName[i]);
-                }
-            }
-            return mydictionary;
 
-        }
+		// Methode zum Ändern des Präfixes
+		public static Dictionary<string, string> ChangePrefixName(List<string> fileNamen, string prefixOld, string prefixNew)
+		{
+			Dictionary<string, string> myDictionary = new Dictionary<string, string>();
 
-    }
+			foreach (var fileName in fileNamen)
+			{
+				string fileNameOnly = Path.GetFileName(fileName);
+				if (fileNameOnly.StartsWith(prefixOld))
+				{
+					string newFileName = prefixNew + fileNameOnly.Substring(prefixOld.Length);
+					string newFilePath = Path.Combine(Path.GetDirectoryName(fileName), newFileName);
+					myDictionary.Add(fileName, newFilePath);
+				}
+			}
+
+			return myDictionary;
+		}
+
+		// Methode zum Ändern des Suffixes
+		public static Dictionary<string, string> ChangeSuffixNames(List<string> fileNamen, string suffixOld, string suffixNew)
+		{
+			Dictionary<string, string> myDictionary = new Dictionary<string, string>();
+
+			foreach (var fileName in fileNamen)
+			{
+				string fileNameOnly = Path.GetFileName(fileName);
+				if (fileNameOnly.EndsWith(suffixOld))
+				{
+					string newFileName = fileNameOnly.Substring(0, fileNameOnly.Length - suffixOld.Length) + suffixNew;
+					string newFilePath = Path.Combine(Path.GetDirectoryName(fileName), newFileName);
+					myDictionary.Add(fileName, newFilePath);
+				}
+			}
+
+			return myDictionary;
+		}
+
+		// Methode zum Löschen des Präfixes
+		public static Dictionary<string, string> DeletePrefixName(List<string> fileNamen, string prefix)
+		{
+			Dictionary<string, string> myDictionary = new Dictionary<string, string>();
+
+			foreach (var fileName in fileNamen)
+			{
+				string fileNameOnly = Path.GetFileName(fileName);
+				if (fileNameOnly.StartsWith(prefix))
+				{
+					string newFileName = fileNameOnly.Substring(prefix.Length);
+					string newFilePath = Path.Combine(Path.GetDirectoryName(fileName), newFileName);
+					myDictionary.Add(fileName, newFilePath);
+				}
+			}
+
+			return myDictionary;
+		}
+
+		// Optional: Methode zum Löschen des Suffixes
+		public static Dictionary<string, string> DeleteSuffixName(List<string> fileNamen, string suffix)
+		{
+			Dictionary<string, string> myDictionary = new Dictionary<string, string>();
+
+			foreach (var fileName in fileNamen)
+			{
+				string fileNameOnly = Path.GetFileName(fileName);
+				if (fileNameOnly.EndsWith(suffix))
+				{
+					string newFileName = fileNameOnly.Substring(0, fileNameOnly.Length - suffix.Length);
+					string newFilePath = Path.Combine(Path.GetDirectoryName(fileName), newFileName);
+					myDictionary.Add(fileName, newFilePath);
+				}
+			}
+
+			return myDictionary;
+		}
+	}
 }
-
