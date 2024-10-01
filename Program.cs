@@ -13,16 +13,25 @@ namespace rename
 
 		static void Main(string[] args)
 		{
-			Console.Write("Geben Sie den Dateipfad ein um weiterzukommen:");
+            bool fertig = false;
+
+            while (fertig == false)
+            {
+				Console.Clear();
+
+            Console.Write("Geben Sie den Dateipfad ein um weiterzukommen:");
 			string directoryPath = Console.ReadLine();
 
-			Console.WriteLine(" 1. Prefix ändern\n  2. Suffix ändern\n  3. Präfix löschen\n  4.Suffix löschen\n  5. Teilausdrücke wechseln ");
-            Console.Write("Suchen Sie ");
+			Console.WriteLine(" 1. Prefix ändern\n 2. Suffix ändern\n 3. Präfix löschen\n 4. Suffix löschen\n 5. Teilausdrücke wechseln\n 6. Fertig");
+            Console.Write("Geben Sie die Nummer von dem gewünschten Vorgang ein:");
             int choosenCase = Int32.Parse(Console.ReadLine());
 
+		
 
 			// Dateinamen lesen
 			List<string> fileNamen = GetFileNames(directoryPath);
+
+			
 
 			switch (choosenCase)
 			{
@@ -35,6 +44,7 @@ namespace rename
 					// Präfix ändern
 					var changedRaeflixNames = ChangePrefixName(fileNamen, PrefixBefore, PrefixAfter);
 					RenameFiles(changedRaeflixNames);
+						Console.ReadKey();
 
 					break;
 				case 2:
@@ -45,24 +55,27 @@ namespace rename
 					// Suffix ändern
 					var changedSuffixNames = ChangeSuffixNames(fileNamen, SuffixBefore, SuffixAfter);
 					RenameFiles(changedSuffixNames);
+                        Console.ReadKey();
 
-					break;
+                        break;
 				case 3:
 					Console.Write("Geben Sie den Prefix ein, welcher gelöscht werden soll: ");
 					string PrefixDelete = Console.ReadLine();
 					// Präfix entfernen
 					var deletedPrefixNames = DeletePrefixName(fileNamen, PrefixDelete);
 					RenameFiles(deletedPrefixNames);
+                        Console.ReadKey();
 
-					break;
+                        break;
 				case 4:
 					Console.Write("Geben Sie den Suffix ein, welcher gelöscht werden soll: ");
 					string SuffixDelete = Console.ReadLine();
 					// Suffix entfernen
 					var deletedSuffixNames = DeleteSuffixName(fileNamen, SuffixDelete);
 					RenameFiles(deletedSuffixNames);
+                        Console.ReadKey();
 
-					break;
+                        break;
 				case 5:
 					Console.Write("Geben Sie den Teilausdrück ein, welcher geändert werden soll: ");
 					string oldPattern = Console.ReadLine();
@@ -70,11 +83,16 @@ namespace rename
 					string newPattern = Console.ReadLine();
 
 					TeilausdrueckeWechsel( directoryPath, oldPattern, newPattern);
+                        Console.ReadKey();
 
-					break;
+                        break;
+						case 6:
+						fertig = true;
+						break;
+                }
 
 
-			}
+            }
 
 			
 		}
