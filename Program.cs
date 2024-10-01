@@ -10,7 +10,6 @@ namespace rename
 {
 	internal class Program
 	{
-
 		static void Main(string[] args)
 		{
             bool fertig = false;
