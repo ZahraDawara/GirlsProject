@@ -19,7 +19,7 @@ namespace rename
             {
 				Console.Clear();
 
-            Console.Write("Geben Sie den Dateipfad ein um weiterzukommen:");
+            gitConsole.Write("Geben Sie den Dateipfad ein um weiterzukommen:");
 			string directoryPath = Console.ReadLine();
 
 			Console.WriteLine(" 1. Prefix ändern\n 2. Suffix ändern\n 3. Präfix löschen\n 4. Suffix löschen\n 5. Teilausdrücke wechseln\n 6. Fertig");
